@@ -1,20 +1,23 @@
-import { Container } from "react-bootstrap";
+// Bootstrap
+import { Container, Row } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+// Components
 import "./App.css";
 import DetailsBody from "./components/profile/DetailsBody";
 import PersonList from "./components/sidebar/PersonList";
+import UsersProvider from "./store/UsersProvider";
 
 function App() {
-  console.log(
-    fetch("http://localhost:8080/api/people").then((res) =>
-      res.json().then((data) => console.log(data))
-    )
-  );
-
   return (
-    <Container>
-      <PersonList />
-      <DetailsBody />
-    </Container>
+    <UsersProvider>
+      <Container fluid>
+        <Row>
+          <PersonList />
+          <DetailsBody />
+        </Row>
+      </Container>
+    </UsersProvider>
   );
 }
 
