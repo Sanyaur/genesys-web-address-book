@@ -1,16 +1,17 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
-import UsersProvider from "../../store/user-context";
-
 const PersonList = () => {
-  const users = useContext(UsersProvider);
+  const [users, setUsers] = useState();
 
-  // sorting users alphabetically, also modifying the original array
-  if (users) {
-    users.sort((a, b) => a.name > b.name);
-  }
+  useEffect(() => {
+    const sortedUsers = (users) => users.sort((a, b) => a.name > b.name);
+
+    fetch("http://localhost:8080/api/people").then((res) =>
+      res.json().then((data) => setUsers(sortedUsers(data.people)))
+    );
+  }, []);
 
   return (
     <Col md={2}>
@@ -36,6 +37,7 @@ const UserList = styled.ul`
   padding: 0;
 `;
 const UserListItem = styled.li`
+  user-select: none;
   &:hover {
     background-color: #eef;
     cursor: pointer;
