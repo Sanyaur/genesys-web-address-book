@@ -1,7 +1,12 @@
 import React from "react";
 
 function Details() {
-  return <div>Details</div>;
+  return (
+    <>
+      <div>Education</div>
+      <div>Experience</div>
+    </>
+  );
 }
 
 export default Details;
