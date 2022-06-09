@@ -1,17 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import avatar from "../../avatar.png";
+import UsersProvider from "../../store/user-context";
 
 function Header() {
+  const {
+    state: { chosenUser },
+  } = useContext(UsersProvider);
+
   return (
     <HeaderComponent>
       <img src={avatar} alt='avatar' />
-      <div>Header</div>;
+      <div>{chosenUser && chosenUser.name}</div>
     </HeaderComponent>
   );
 }
 
 const HeaderComponent = styled.div`
+  display: flex;
+
   & img {
     width: 125px;
     height: 125px;
