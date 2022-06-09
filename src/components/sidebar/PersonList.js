@@ -8,7 +8,7 @@ import { DotSpinner } from "@uiball/loaders";
 
 const PersonList = () => {
   const [users, setUsers] = useState();
-  const { state, dispatch } = useContext(UsersProvider);
+  const { dispatch } = useContext(UsersProvider);
 
   useEffect(() => {
     const sortedUsers = (users) => users.sort((a, b) => a.name > b.name);
@@ -16,20 +16,30 @@ const PersonList = () => {
     const fetchingData = async () => {
       const response = await fetch("http://localhost:8080/api/people");
       const data = await response.json();
-      setUsers(sortedUsers(data.people));
-      await dispatch({ type: "CHOSEN_USER", payload: data.people });
+
+      const people = data.people;
+      const firstUser = people[0];
+
+      setUsers(sortedUsers(people));
+      await dispatch({ type: "CHOSEN_USER", payload: firstUser });
     };
     fetchingData();
   }, []);
 
   const zeroPadding = { paddingLeft: 0, paddingRight: 0 };
+
   return (
     <Col md={2} style={zeroPadding}>
       <Sidebar>
         <UserList>
           {users ? (
             users.map((user) => (
-              <UserListItem key={uuidv4()}>{user.name}</UserListItem>
+              <UserListItem
+                key={uuidv4()}
+                onClick={() => dispatch({ type: "CHOSEN_USER", payload: user })}
+              >
+                {user.name}
+              </UserListItem>
             ))
           ) : (
             <DotSpinner size={40} speed={0.9} color='black' />
