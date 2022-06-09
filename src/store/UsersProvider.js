@@ -1,19 +1,31 @@
 import UserContext from "./user-context";
 
-import React, { useEffect, useState } from "react";
+import React, { useReducer } from "react";
+
+const initialValue = { chosenUser: "" };
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "CHOSEN_USER":
+      const chosenUser = action.payload;
+
+      return {
+        chosenUser: chosenUser,
+      };
+
+    default:
+      break;
+  }
+};
 
 function UsersProvider({ children }) {
-  const [users, setUsers] = useState([]);
+  const [state, dispatch] = useReducer(reducer, initialValue);
 
-  useEffect(() => {
-    setUsers(
-      fetch("http://localhost:8080/api/people").then((res) =>
-        res.json().then((data) => console.log(data))
-      )
-    );
-  }, []);
-
-  return <UserContext.Provider value={users}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ state, dispatch }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
 
 export default UsersProvider;
